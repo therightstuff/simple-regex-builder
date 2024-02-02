@@ -90,7 +90,7 @@ The `REGEX` object is a set of key/value pairs, where some of the values are str
 | --- | ------ | ----------- |
 | CHARACTERS_IN_SET | `("abc") => "[abc]"` | Find any character between the brackets |
 | CHARACTERS_NOT_IN_SET | `("abc") => "[^abc]"` | Find any character NOT between the brackets |
-| STRINGS_IN_SET | `("abc","def") => "(abc\|def)"` | Find any of the alternatives specified |
+| IN_SET | `("abc","d[ef]*") => "(abc\|d[ef]*)"` | Find any of the alternatives specified |
 
 #### Metacharacters
 
@@ -121,17 +121,20 @@ The `REGEX` object is a set of key/value pairs, where some of the values are str
 
 #### Quantifiers
 
-| Key | Value | Description |
-| AT_LEAST_N: (n: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n},}`,
-| BETWEEN_N_AND_M: (n: number, m: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n},${m}}`,
-| EXACTLY_N: (n: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n}}`,
-| GROUP: (regex: string | RegExp | SimpleRegexBuilder) => `(${regexToStr(regex)})`,
-| ONE_OR_MORE: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}+`,
-| OPTIONAL: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}?`,
-| OR: '|',
-| ZERO_OR_MORE: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}*`,
-| ZERO_OR_ONE: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}?`,
+Quantifier methods accept regex in the form of strings, `RegExp` objects and `SimpleRegexBuilder` objects.
 
+If the length of the given argument is greater than 1 then it will be enclosed in brackets, eg. `("n") => "n*"` but `("abc") => "(abc)*"`.
+
+| Key | Value | Description |
+| --- | ------ | ----------- |
+| ONE_OR_MORE or AT_LEAST_ONE | `("n") => "n+"`, | Matches any string that contains at least one n |
+| ZERO_OR_MORE | `("n") => "n*"` | Matches any string that contains zero or more occurrences of n |
+| ZERO_OR_ONE or OPTIONAL | `("n") => "n?"` | Matches any string that contains zero or one occurrences of n |
+| EXACTLY_X or EXACTLY_N or EXACTLY | `(2, "n") => "n{3}"` | Matches any string that contains a sequence of X n's |
+| BETWEEN_X_AND_Y or BETWEEN_N_AND_M or BETWEEN: `(1, 3, "n") => "n{1,3}"` | Matches any string that contains a sequence of X to Y n's |
+| AT_LEAST_X or AT_LEAST_N or AT_LEAST | `(1, "n") => "n{1,}"` | Matches any string that contains a sequence of at least X n's |
+| IS_FOLLOWED_BY | `("\s+term") => "(?=\s+term)"` | Matches any string that is followed by a specific string n |
+| IS_NOT_FOLLOWED_BY or NOT_FOLLOWED_BY | `("\s+term") => "(?!\s+term)"` | Matches any string that is followed by a specific string n |
 
 ### Examples
 

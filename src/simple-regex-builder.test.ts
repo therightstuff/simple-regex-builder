@@ -44,7 +44,7 @@ describe('SimpleRegexBuilder chaining', () => {
     });
 
     test('add', () => {
-        const builder = new SimpleRegexBuilder().startsWith(REGEX.ANY_CHARACTER_IN_SET("a-z"))
+        const builder = new SimpleRegexBuilder().startsWith(REGEX.CHARACTERS_IN_SET("a-z"))
             .add('test')
             .followedBy(REGEX.DIGIT);
         expect(builder.toString()).toBe('/^[a-z]test\\d/');
@@ -63,18 +63,18 @@ describe('SimpleRegexBuilder chaining', () => {
 
 describe('SimpleRegexBuilder groups', () => {
     test('single group', () => {
-        const builder = new SimpleRegexBuilder().startsWith(REGEX.GROUP('test'));
-        expect(builder.toString()).toBe('/^(test)/');
+        const builder = new SimpleRegexBuilder().startsWith(REGEX.IN_SET('hello', 'world'));
+        expect(builder.toString()).toBe('/^(hello|world)/');
     });
 
     test('multiple groups', () => {
-        const builder = new SimpleRegexBuilder().startsWith(REGEX.GROUP('test')).followedBy(REGEX.GROUP('hello'));
-        expect(builder.toString()).toBe('/^(test)(hello)/');
+        const builder = new SimpleRegexBuilder().startsWith(REGEX.IN_SET('hello', 'goodbye')).followedBy(REGEX.IN_SET('world', 'universe'));
+        expect(builder.toString()).toBe('/^(hello|goodbye)(world|universe)/');
     });
 
     test('nested groups', () => {
-        const builder = new SimpleRegexBuilder().startsWith(REGEX.GROUP(REGEX.GROUP('test')));
-        expect(builder.toString()).toBe('/^((test))/');
+        const builder = new SimpleRegexBuilder().startsWith(REGEX.IN_SET(REGEX.IN_SET('hello', 'goodbye'), 'world'));
+        expect(builder.toString()).toBe('/^((hello|goodbye)|world)/');
     });
 });
 
