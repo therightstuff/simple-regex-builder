@@ -46,7 +46,7 @@ describe('SimpleRegexBuilder chaining', () => {
     test('add', () => {
         const builder = new SimpleRegexBuilder().startsWith(REGEX.ANY_CHARACTER_IN_SET("a-z"))
             .add('test')
-            .followedBy(REGEX.ANY_DIGIT);
+            .followedBy(REGEX.DIGIT);
         expect(builder.toString()).toBe('/^[a-z]test\\d/');
     });
 

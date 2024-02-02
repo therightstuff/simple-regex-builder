@@ -37,7 +37,15 @@ console.log(r.toString());
 // /^a\s{1,3}b$/gi
 ```
 
+The regex object's sequence can be manipulated with the `startsWith`, `endsWith`, `add` and `followedBy`.
+
 For convenience, the `add` and `followedBy` methods are synonymous.
+
+`end` is the equivalent of `endsWith('')`.
+
+The regex modifiers can be manipulated with `global`, `ignoreCase`, `multiline` and `unicode`, which all receive a boolean parameter that defaults to `true`.
+
+*NOTE: The `sticky` modifier and `lastIndex` property of `RegExp` don't really make sense for a builder, if you need that functionality just `build` a `RegExp` object as described below and use that instead.*
 
 To reuse a partially developed builder, provide it as the argument to a new object's constructor, or use the `clone` method directly:
 
@@ -71,6 +79,59 @@ console.log(r.exec('The rain in Spain falls mainly on the plain.'));
 ```
 
 ### REGEX
+
+The `REGEX` object includes both constants and functions that accept strings, `RegExp` and `SimpleRegexBuilder` objects.
+
+The `REGEX` object is a set of key/value pairs, where some of the values are strings and some of them functions.
+
+#### Brackets
+
+| Key | Value | Description |
+| --- | ------ | ----------- |
+| CHARACTERS_IN_SET | `("abc") => "[abc]"` | Find any character between the brackets |
+| CHARACTERS_NOT_IN_SET | `("abc") => "[^abc]"` | Find any character NOT between the brackets |
+| STRINGS_IN_SET | `("abc","def") => "(abc\|def)"` | Find any of the alternatives specified |
+
+#### Metacharacters
+
+| Key | Value | Description |
+| --- | ------ | ----------- |
+| ANY_CHARACTER or ANY | `.` | Find a single character, except newline or line terminator |
+| WORD_CHARACTER or WORD | `\w` | Find any word character, equivalent to `[a-zA-Z_0-9]` |
+| NON_WORD_CHARACTER or NON_WORD | `\W` | Find a non-word character, equivalent to `[^a-zA-Z_0-9]` |
+| DIGIT | `\d` | Find a digit |
+| NON_DIGIT | `\D` | Find a non-digit character |
+| WHITESPACE | `\s` | Find a whitespace character |
+| NON_WHITESPACE | `\S` | Find a non-whitespace character |
+| MATCH_WORD_BEGINNING_WITH | `("word") => "\bword"` | Find a match at the beginning of a word |
+| MATCH_WORD_ENDING_WITH | `("word") => "word\b"` | Find a match at the end of a word |
+| MATCH_WORD_BEGINNING_AND_ENDING_WITH | `("word") => "\bword\b"` | Find a match for the whole word |
+| MATCH_WORD_NOT_BEGINNING_WITH | `("word") => "\Bword"` | Find a match for the word, but not if it's at the beginning of a word |
+| MATCH_WORD_NOT_ENDING_WITH | `("word") => "word\B"` | Find a match for the word, but not if it's at the end of a word |
+| MATCH_WORD_NOT_BEGINNING_OR_ENDING_WITH | `("word") => "\Bword\B"` | Find a match for the word, but not if it's at the beginning or end of a word |
+| NULL_CHARACTER or NULL | `\0` | Find a NULL character |
+| NEW_LINE | `\n` | Find a new line character |
+| FORM_FEED | `\f` | Find a form feed character |
+| CARRIAGE_RETURN | `\r` | Find a carriage return character |
+| TAB | `\t` | Find a tab character |
+| VERTICAL_TAB | `\v` | Find a vertical tab character |
+| OCTAL_NUMBER or OCT | `("17") => "\17"` | Find the character specified by the given octal number |
+| HEXADECIMAL_NUMBER or HEX_NUMBER or HEX | `("1a") => "\x1a"` | Find the character specified by the given hexadecimal number |
+| UNICODE_CHARACTER or UNICODE | `("1F1EE", "1F1F1") => "\u{1F1EE}\u{1F1F1}"` | Find the Unicode character specified by a given hexadecimal number / numbers<br>*WARNING: the unicode modifier must be provided in order for this to match* |
+
+#### Quantifiers
+
+| Key | Value | Description |
+| AT_LEAST_N: (n: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n},}`,
+| BETWEEN_N_AND_M: (n: number, m: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n},${m}}`,
+| EXACTLY_N: (n: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n}}`,
+| GROUP: (regex: string | RegExp | SimpleRegexBuilder) => `(${regexToStr(regex)})`,
+| ONE_OR_MORE: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}+`,
+| OPTIONAL: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}?`,
+| OR: '|',
+| ZERO_OR_MORE: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}*`,
+| ZERO_OR_ONE: (regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}?`,
+
 
 ### Examples
 

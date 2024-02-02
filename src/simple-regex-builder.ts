@@ -39,6 +39,16 @@ export class SimpleRegexBuilder {
         return this;
     }
 
+    public singleLine(isSingleLine: boolean = true): SimpleRegexBuilder {
+        this._modifiers['s'] = isSingleLine;
+        return this;
+    }
+
+    public unicode(isUnicode: boolean = true): SimpleRegexBuilder {
+        this._modifiers['u'] = isUnicode;
+        return this;
+    }
+
     public startsWith(regex?: string | SimpleRegexBuilder): SimpleRegexBuilder {
         this._startsWith = regex || '';
         return this;
