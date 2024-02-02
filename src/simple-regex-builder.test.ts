@@ -1,4 +1,5 @@
-import { REGEX, SimpleRegexBuilder } from './index';
+import { REGEX } from './regex';
+import { SimpleRegexBuilder } from './simple-regex-builder';
 
 describe('SimpleRegexBuilder construction', () => {
     test('simple', () => {
