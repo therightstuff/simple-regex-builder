@@ -11,7 +11,23 @@
     "type": "git",
     "url": "git+https://github.com/therightstuff/simple-regex-builder.git"
   },
-  "keywords": [],
+  "keywords": [
+    "regex",
+    "builder",
+    "es6",
+    "commonjs",
+    "typescript",
+    "javascript",
+    "regexp",
+    "regular",
+    "expression",
+    "simple",
+    "human",
+    "friendly",
+    "readable",
+    "easy",
+    "module"
+  ],
   "author": "therightstuff",
   "license": "MIT",
   "devDependencies": {

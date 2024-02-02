@@ -60,7 +60,7 @@ const r = new SimpleRegexBuilder().add("rain").build();
 const s = new SimpleRegexBuilder().add("spain").toRegExp();
 ```
 
-For convenience, the `RegExp` class's `exec`, `test` and `toString` methods can be called directly on the `SimpleRegexBuilder` itself.
+For convenience, the `RegExp` class's `exec`, `test` and `toString` methods can be called directly on the `SimpleRegexBuilder` itself:
 
 ```javascript
 const r = new SimpleRegexBuilder().add("ain");
