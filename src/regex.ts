@@ -8,18 +8,23 @@ export const REGEX = {
     ANY_CHARACTER_IN_SET: (characters: string) => `[${characters}]`,
     ANY_CHARACTER_NOT_IN_SET: (characters: string) => `[^${characters}]`,
     ZERO_OR_MORE: (regex: string | RegExp | SimpleRegexBuilder) => {
-        if (typeof regex === "string" && regex.length === 1) {
-            return `${regex}*`;
-        }
         if (regex instanceof RegExp) {
             return `(${regex.source})*`;
         }
         if (regex instanceof SimpleRegexBuilder) {
             return `(${regex.toRegExp().source})*`;
         }
-        return `(${regex})*`;
+        return regex.length === 1 ? `${regex}*` : `(${regex})*`;
     },
-    ONE_OR_MORE: (regex: string | SimpleRegexBuilder) => `${regex}+`,
+    ONE_OR_MORE: (regex: string | RegExp | SimpleRegexBuilder) => {
+        if (regex instanceof RegExp) {
+            return `(${regex.source})+`;
+        }
+        if (regex instanceof SimpleRegexBuilder) {
+            return `(${regex.toRegExp().source})+`;
+        }
+        return regex.length === 1 ? `${regex}+` : `(${regex})+`;
+    },
     OPTIONAL: (regex: string | SimpleRegexBuilder) => `${regex}?`,
     ZERO_OR_ONE: (regex: string | SimpleRegexBuilder) => `${regex}?`,
     EXACTLY_N: (n: number, regex: string | SimpleRegexBuilder) => `${regex}{${n}}`,
