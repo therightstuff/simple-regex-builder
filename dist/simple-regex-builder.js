@@ -33,6 +33,14 @@ class SimpleRegexBuilder {
         this._modifiers['m'] = isMultiline;
         return this;
     }
+    singleLine(isSingleLine = true) {
+        this._modifiers['s'] = isSingleLine;
+        return this;
+    }
+    unicode(isUnicode = true) {
+        this._modifiers['u'] = isUnicode;
+        return this;
+    }
     startsWith(regex) {
         this._startsWith = regex || '';
         return this;

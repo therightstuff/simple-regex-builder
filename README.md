@@ -1,5 +1,7 @@
 # Simple Regex Builder
 
+![](https://img.shields.io/badge/Coverage-56%25-F2E96B.svg?color=black&prefix=$coverage$)
+
 A human-friendly regex builder.
 
 ## Installation
@@ -12,13 +14,13 @@ npm i simple-regex-builder
 
 ### Importing
 
-ES modules:
+#### ES modules
 
 ```typescript
 import { REGEX, SimpleRegexBuilder } from 'simple-regex-builder';
 ```
 
-CommonJS modules:
+#### CommonJS modules
 
 ```javascript
 const { REGEX, SimpleRegexBuilder} = require('simple-regex-builder');

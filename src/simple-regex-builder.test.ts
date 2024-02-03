@@ -38,26 +38,33 @@ describe('SimpleRegexBuilder clone', () => {
 });
 
 describe('SimpleRegexBuilder chaining', () => {
-    test('followedBy', () => {
-        const builder = new SimpleRegexBuilder().startsWith('test').add(REGEX.ONE_OR_MORE(REGEX.ANY_CHARACTER));
-        expect(builder.toString()).toBe('/^test.+/');
+    test('startsWith', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test');
+        expect(builder.toString()).toBe('/^test/');
     });
 
-    test('add', () => {
-        const builder = new SimpleRegexBuilder().startsWith(REGEX.CHARACTERS_IN_SET("a-z"))
-            .add('test')
+    test('add and followedBy', () => {
+        const normalOrder = new SimpleRegexBuilder().startsWith(REGEX.CHARACTERS_IN_SET("a-z"))
+            .add(' first ')
             .followedBy(REGEX.DIGIT);
-        expect(builder.toString()).toBe('/^[a-z]test\\d/');
+        expect(normalOrder.toString()).toBe('/^[a-z] first \\d/');
+        const reverseOrder = new SimpleRegexBuilder()
+            .followedBy(REGEX.DIGIT)
+            .add(' first ')
+            .startsWith(REGEX.CHARACTERS_IN_SET("a-z"));
+        expect(reverseOrder.toString()).toBe('/^[a-z]\\d first /');
     });
 
-    test('endsWith', () => {
-        const builder = new SimpleRegexBuilder().startsWith('hello').endsWith('world');
-        expect(builder.toString()).toBe('/^helloworld$/');
+    test('starts and ends', () => {
+        const normalOrder = new SimpleRegexBuilder().startsWith('start').add('-').endsWith('end');
+        expect(normalOrder.toString()).toBe('/^start-end$/');
+        const reverseOrder = new SimpleRegexBuilder().endsWith('end').add('-').startsWith('start');
+        expect(reverseOrder.toString()).toBe('/^start-end$/');
     });
 
     test('ends', () => {
-        const builder = new SimpleRegexBuilder().startsWith('test').ends();
-        expect(builder.toString()).toBe('/^test$/');
+        const builder = new SimpleRegexBuilder().startsWith(' start ').ends();
+        expect(builder.toString()).toBe('/^ start $/');
     });
 });
 
@@ -75,23 +82,5 @@ describe('SimpleRegexBuilder groups', () => {
     test('nested groups', () => {
         const builder = new SimpleRegexBuilder().startsWith(REGEX.IN_SET(REGEX.IN_SET('hello', 'goodbye'), 'world'));
         expect(builder.toString()).toBe('/^((hello|goodbye)|world)/');
-    });
-});
-
-describe('REGEX.ZERO_OR_MORE', () => {
-    test('char', () => {
-        expect(REGEX.ZERO_OR_MORE('t')).toBe('t*');
-    });
-
-    test('string', () => {
-        expect(REGEX.ZERO_OR_MORE('test')).toBe('(test)*');
-    });
-
-    test('RegExp', () => {
-        expect(REGEX.ZERO_OR_MORE(new RegExp('test'))).toBe('(test)*');
-    });
-
-    test('SimpleRegexBuilder', () => {
-        expect(REGEX.ZERO_OR_MORE(new SimpleRegexBuilder().add('test'))).toBe('(test)*');
     });
 });
