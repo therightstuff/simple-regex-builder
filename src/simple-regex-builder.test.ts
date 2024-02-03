@@ -71,6 +71,8 @@ describe('SimpleRegexBuilder chaining', () => {
         expect(regExpBuilder.toString()).toBe('/^test/');
         const builderBuilder = new SimpleRegexBuilder().startsWith(new SimpleRegexBuilder().add('test'));
         expect(builderBuilder.toString()).toBe('/^test/');
+        const noStartBuilder = new SimpleRegexBuilder().startsWith().add('test');
+        expect(noStartBuilder.toString()).toBe('/test/');
     });
 
     test('add and followedBy', () => {

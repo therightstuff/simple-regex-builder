@@ -28,7 +28,10 @@ const generateUnicode = (...codes: string[]) => {
     return codes.map((code) => generateSingleUnicode(code)).join('');
 }
 
-const regexToStr = (regex: string | RegExp | SimpleRegexBuilder, isForSet: boolean = false) => {
+const USE_BRACKET_WRAPPING = true;
+const NO_BRACKET_WRAPPING = false;
+
+const regexToStr = (regex: string | RegExp | SimpleRegexBuilder, useBracketWrapping: boolean = USE_BRACKET_WRAPPING) => {
     let regexString = regex instanceof RegExp ? regex.source : regex instanceof SimpleRegexBuilder ? regex.toRegExp().source : regex;
     // if it's a group already, don't wrap it in another group
     if (regexString.startsWith('(') && regexString.endsWith(')')) {
@@ -37,7 +40,7 @@ const regexToStr = (regex: string | RegExp | SimpleRegexBuilder, isForSet: boole
     if (regexString.startsWith('[') && regexString.endsWith(']')) {
         return regexString;
     }
-    return !isForSet && regexString.length > 1 ? `(${regexString})` : regexString;
+    return useBracketWrapping && regexString.length > 1 ? `(${regexString})` : regexString;
 }
 
 const BRACKETS = {
@@ -46,7 +49,7 @@ const BRACKETS = {
     // | CHARACTERS_NOT_IN_SET | `("abc") => "[^abc]"` | Find any character NOT between the brackets |
     CHARACTERS_NOT_IN_SET: (characters: string) => `[^${characters}]`,
     // | IN_SET | `("abc","d[ef]*") => "(abc\|d[ef]*)"` | Find any of the alternatives specified |
-    IN_SET: (...alternatives: any[]) => `(${alternatives.map((regex) => regexToStr(regex, true)).join('|')})`,
+    IN_SET: (...alternatives: any[]) => `(${alternatives.map((regex) => regexToStr(regex, NO_BRACKET_WRAPPING)).join('|')})`,
 };
 
 const METACHARACTERS = {
@@ -124,10 +127,12 @@ const QUANTIFIERS = {
     AT_LEAST_X: (x: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${x},}`,
     AT_LEAST_N: (n: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n},}`,
     AT_LEAST: (n: number, regex: string | RegExp | SimpleRegexBuilder) => `${regexToStr(regex)}{${n},}`,
-    // | IS_FOLLOWED_BY | `("\s+term") => "(?=\s+term)"` | Matches any string that is followed by a specific string n |
-    IS_FOLLOWED_BY: (regex: string | RegExp | SimpleRegexBuilder) => `(?=${regexToStr(regex)})`,
+    // | IS_FOLLOWED_BY or FOLLOWED_BY | `("\s+term") => "(?=\s+term)"` | Matches any string that is followed by a specific string n |
+    IS_FOLLOWED_BY: (regex: string | RegExp | SimpleRegexBuilder) => `(?=${regexToStr(regex, NO_BRACKET_WRAPPING)})`,
+    FOLLOWED_BY: (regex: string | RegExp | SimpleRegexBuilder) => `(?=${regexToStr(regex, NO_BRACKET_WRAPPING)})`,
     // | IS_NOT_FOLLOWED_BY or NOT_FOLLOWED_BY | `("\s+term") => "(?!\s+term)"` | Matches any string that is followed by a specific string n |
-    IS_NOT_FOLLOWED_BY: (regex: string | RegExp | SimpleRegexBuilder) => `(?!${regexToStr(regex)})`,
+    IS_NOT_FOLLOWED_BY: (regex: string | RegExp | SimpleRegexBuilder) => `(?!${regexToStr(regex, NO_BRACKET_WRAPPING)})`,
+    NOT_FOLLOWED_BY: (regex: string | RegExp | SimpleRegexBuilder) => `(?!${regexToStr(regex, NO_BRACKET_WRAPPING)})`,
 };
 
 export const REGEX = {
