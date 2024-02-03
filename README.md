@@ -86,6 +86,13 @@ The `REGEX` object includes both constants and functions that accept strings, `R
 
 The `REGEX` object is a set of key/value pairs, where some of the values are strings and some of them functions.
 
+```javascript
+console.log(REGEX.ANY_CHARACTER);
+// "."
+console.log(REGEX.CHARACTERS_IN_SET("a-z0-9"));
+// "[a-z0-9]"
+```
+
 #### Brackets
 
 | Key | Value | Description |
@@ -137,16 +144,6 @@ If the length of the given argument is greater than 1 then it will be enclosed i
 | AT_LEAST_X or AT_LEAST_N or AT_LEAST | `(1, "n") => "n{1,}"` | Matches any string that contains a sequence of at least X n's |
 | IS_FOLLOWED_BY or FOLLOWED_BY | `("\s+term") => "(?=\s+term)"` | Matches any string that is followed by a specific string n |
 | IS_NOT_FOLLOWED_BY or NOT_FOLLOWED_BY | `("\s+term") => "(?!\s+term)"` | Matches any string that is followed by a specific string n |
-
-### Examples
-
-```javascript
-console.log(new SimpleRegexBuilder().startsWith('a').endsWith('b').toString());
-// ^ab$
-
-console.log(REGEX.ONE_OR_MORE('a'));
-// a+
-```
 
 ## License
 
