@@ -4,18 +4,38 @@
   "description": "A human-friendly regex builder",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "npm run test:coverage && npm run coverage:badge && tsc",
+    "coverage:badge": "coverage-badge-creator",
+    "test": "jest",
+    "test:coverage": "npm test -- --coverage",
+    "package-upgrade": "npx npm-check-updates -u"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/therightstuff/simple-regex-builder.git"
   },
-  "keywords": [],
+  "keywords": [
+    "regex",
+    "builder",
+    "es6",
+    "commonjs",
+    "typescript",
+    "javascript",
+    "regexp",
+    "regular",
+    "expression",
+    "simple",
+    "human",
+    "friendly",
+    "readable",
+    "easy",
+    "module"
+  ],
   "author": "therightstuff",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.5.11",
+    "coverage-badge-creator": "^1.0.19",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
