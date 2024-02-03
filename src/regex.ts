@@ -34,6 +34,9 @@ const regexToStr = (regex: string | RegExp | SimpleRegexBuilder, isForSet: boole
     if (regexString.startsWith('(') && regexString.endsWith(')')) {
         return regexString;
     }
+    if (regexString.startsWith('[') && regexString.endsWith(']')) {
+        return regexString;
+    }
     return !isForSet && regexString.length > 1 ? `(${regexString})` : regexString;
 }
 
@@ -43,7 +46,7 @@ const BRACKETS = {
     // | CHARACTERS_NOT_IN_SET | `("abc") => "[^abc]"` | Find any character NOT between the brackets |
     CHARACTERS_NOT_IN_SET: (characters: string) => `[^${characters}]`,
     // | IN_SET | `("abc","d[ef]*") => "(abc\|d[ef]*)"` | Find any of the alternatives specified |
-    IN_SET: (...alternatives: string[]) => `(${alternatives.map((regex) => regexToStr(regex, true)).join('|')})`,
+    IN_SET: (...alternatives: any[]) => `(${alternatives.map((regex) => regexToStr(regex, true)).join('|')})`,
 };
 
 const METACHARACTERS = {

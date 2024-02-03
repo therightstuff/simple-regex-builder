@@ -37,10 +37,40 @@ describe('SimpleRegexBuilder clone', () => {
     });
 });
 
-describe('SimpleRegexBuilder chaining', () => {
-    test('startsWith', () => {
+describe('SimpleRegexBuilder RegExp methods', () => {
+    test('exec', () => {
+        const builder = new SimpleRegexBuilder().add('ain');
+        expect(builder.toString()).toBe('/ain/');
+        expect(JSON.stringify(builder.exec('the rain in spain'))).toEqual(JSON.stringify(["ain"]));
+        expect(builder.exec('this must fail')).toBeNull();
+    });
+
+    test('test', () => {
         const builder = new SimpleRegexBuilder().startsWith('test');
         expect(builder.toString()).toBe('/^test/');
+        expect(builder.test('test')).toBe(true);
+        expect(builder.test('not test')).toBe(false);
+    });
+
+    test('toString', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test');
+        expect(builder.toString()).toBe('/^test/');
+    });
+
+    test('toRegExp', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test');
+        expect(builder.toRegExp().source).toBe('^test');
+    });
+});
+
+describe('SimpleRegexBuilder chaining', () => {
+    test('startsWith', () => {
+        const stringBuilder = new SimpleRegexBuilder().startsWith('test');
+        expect(stringBuilder.toString()).toBe('/^test/');
+        const regExpBuilder = new SimpleRegexBuilder().startsWith(new RegExp('test'));
+        expect(regExpBuilder.toString()).toBe('/^test/');
+        const builderBuilder = new SimpleRegexBuilder().startsWith(new SimpleRegexBuilder().add('test'));
+        expect(builderBuilder.toString()).toBe('/^test/');
     });
 
     test('add and followedBy', () => {
@@ -82,5 +112,43 @@ describe('SimpleRegexBuilder groups', () => {
     test('nested groups', () => {
         const builder = new SimpleRegexBuilder().startsWith(REGEX.IN_SET(REGEX.IN_SET('hello', 'goodbye'), 'world'));
         expect(builder.toString()).toBe('/^((hello|goodbye)|world)/');
+    });
+});
+
+describe('SimpleRegexBuilder modifiers', () => {
+    test('global', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test').global();
+        expect(builder.toString()).toBe('/^test/g');
+    });
+
+    test('ignoreCase', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test').ignoreCase();
+        expect(builder.toString()).toBe('/^test/i');
+    });
+
+    test('multiline', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test').multiline();
+        expect(builder.toString()).toBe('/^test/m');
+    });
+
+    test('unicode', () => {
+        const builder = new SimpleRegexBuilder().startsWith('test').unicode();
+        expect(builder.toString()).toBe('/^test/u');
+    });
+});
+
+describe('SimpleRegexBuilder multiline modifier', () => {
+    test('multiline test fails when multiline not selected', () => {
+        const builder = new SimpleRegexBuilder().startsWith('second');
+        expect(builder.toString()).toBe(`/^second/`);
+        expect(builder.test(`first line
+second line`)).toBe(false);
+    });
+
+    test('multiline test succeeds when multiline selected', () => {
+        const builder = new SimpleRegexBuilder().startsWith('second').multiline();
+        expect(builder.toString()).toBe(`/^second/m`);
+        expect(builder.test(`first line
+second line`)).toBe(true);
     });
 });

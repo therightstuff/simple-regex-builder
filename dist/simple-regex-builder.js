@@ -1,14 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SimpleRegexBuilder = void 0;
+const normalizeRegexParam = (regex) => {
+    if (regex) {
+        if (regex instanceof SimpleRegexBuilder) {
+            return regex.build().source;
+        }
+        if (regex instanceof RegExp) {
+            return regex.source;
+        }
+        return regex;
+    }
+    // handle empty string
+    if (typeof regex === 'string') {
+        return regex;
+    }
+    return undefined;
+};
 class SimpleRegexBuilder {
     constructor(regex) {
         this._modifiers = {};
         this._parts = [];
-        if (regex instanceof SimpleRegexBuilder) {
-            return regex.clone();
+        if (regex) {
+            if (regex instanceof SimpleRegexBuilder) {
+                return regex.clone();
+            }
+            this._parts.push(normalizeRegexParam(regex));
+            if (regex instanceof RegExp) {
+                this._modifiers['g'] = regex.global;
+                this._modifiers['i'] = regex.ignoreCase;
+                this._modifiers['m'] = regex.multiline;
+                this._modifiers['u'] = regex.unicode;
+            }
         }
-        this._regex = regex;
         this._startsWith = undefined;
         this._endsWith = undefined;
     }
@@ -17,7 +41,6 @@ class SimpleRegexBuilder {
         clone._endsWith = this._endsWith;
         clone._modifiers = Object.assign({}, this._modifiers);
         clone._parts = [...this._parts];
-        clone._regex = this._regex;
         clone._startsWith = this._startsWith;
         return clone;
     }
@@ -33,36 +56,29 @@ class SimpleRegexBuilder {
         this._modifiers['m'] = isMultiline;
         return this;
     }
-    singleLine(isSingleLine = true) {
-        this._modifiers['s'] = isSingleLine;
-        return this;
-    }
     unicode(isUnicode = true) {
         this._modifiers['u'] = isUnicode;
         return this;
     }
     startsWith(regex) {
-        this._startsWith = regex || '';
+        this._startsWith = normalizeRegexParam(regex);
         return this;
     }
     add(regex) {
-        this._parts.push(regex);
+        this._parts.push(normalizeRegexParam(regex));
         return this;
     }
     followedBy(regex) {
-        return this.add(regex);
+        return this.add(normalizeRegexParam(regex));
     }
     ends() {
         return this.endsWith('');
     }
     endsWith(regex = '') {
-        this._endsWith = regex;
+        this._endsWith = normalizeRegexParam(regex);
         return this;
     }
     build() {
-        if (this._regex) {
-            return this._regex instanceof SimpleRegexBuilder ? this._regex.build() : this._regex;
-        }
         let regexString = "";
         if (this._startsWith) {
             regexString += `^${this._startsWith.toString()}`;

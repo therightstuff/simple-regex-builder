@@ -1,6 +1,6 @@
 # Simple Regex Builder
 
-![](https://img.shields.io/badge/Coverage-56%25-F2E96B.svg?color=black&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-67%25-5A7302.svg?color=black&prefix=$coverage$)
 
 A human-friendly regex builder.
 

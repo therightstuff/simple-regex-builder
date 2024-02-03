@@ -32,6 +32,9 @@ const regexToStr = (regex, isForSet = false) => {
     if (regexString.startsWith('(') && regexString.endsWith(')')) {
         return regexString;
     }
+    if (regexString.startsWith('[') && regexString.endsWith(']')) {
+        return regexString;
+    }
     return !isForSet && regexString.length > 1 ? `(${regexString})` : regexString;
 };
 const BRACKETS = {
