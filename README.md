@@ -140,7 +140,7 @@ If the length of the given argument is greater than 1 then it will be enclosed i
 | ZERO_OR_MORE | `("n") => "n*"` | Matches any string that contains zero or more occurrences of n |
 | ZERO_OR_ONE or OPTIONAL | `("n") => "n?"` | Matches any string that contains zero or one occurrences of n |
 | EXACTLY_X or EXACTLY_N or EXACTLY | `(2, "n") => "n{3}"` | Matches any string that contains a sequence of X n's |
-| BETWEEN_X_AND_Y or BETWEEN_N_AND_M or BETWEEN: `(1, 3, "n") => "n{1,3}"` | Matches any string that contains a sequence of X to Y n's |
+| BETWEEN_X_AND_Y or BETWEEN_N_AND_M or BETWEEN | `(1, 3, "n") => "n{1,3}"` | Matches any string that contains a sequence of X to Y n's |
 | AT_LEAST_X or AT_LEAST_N or AT_LEAST | `(1, "n") => "n{1,}"` | Matches any string that contains a sequence of at least X n's |
 | IS_FOLLOWED_BY or FOLLOWED_BY | `("\s+term") => "(?=\s+term)"` | Matches any string that is followed by a specific string n |
 | IS_NOT_FOLLOWED_BY or NOT_FOLLOWED_BY | `("\s+term") => "(?!\s+term)"` | Matches any string that is followed by a specific string n |
